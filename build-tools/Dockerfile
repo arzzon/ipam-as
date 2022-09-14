@@ -1,0 +1,10 @@
+FROM golang
+
+ENV GO111MODULE=on
+
+WORKDIR /
+
+ADD bin /bin/
+
+EXPOSE 8080
+ENTRYPOINT ["/bin/sh"]
