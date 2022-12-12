@@ -18,5 +18,23 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          args:
+            - --ipam-provider
+            - infoblox
+            - --infoblox-grid-host
+            - 10.145.67.27
+            - --infoblox-wapi-port
+            - "443"
+            - --infoblox-wapi-version
+            - 2.11.2
+            - --infoblox-username
+            - admin
+            - --infoblox-password
+            - infoblox
+            - --infoblox-labels
+            - '{"Dev":{"cidr": "10.8.128.0/17"},"Test":{"cidr": "10.9.0.0/16"},"Production":{"cidr":
+                    "10.10.0.0/16"}, "Default":{"cidr": "10.11.0.0/16"}}'
+            - --infoblox-netview
+            - netview_10_218_132_7
           command:
             - /bin/ipam-as

@@ -6,5 +6,5 @@ WORKDIR /
 
 ADD bin /bin/
 
-EXPOSE 8080
+EXPOSE 50051
 ENTRYPOINT ["/bin/sh"]
