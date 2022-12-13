@@ -39,7 +39,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// The request message containing the user's name.
 type AllocateIPRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -95,7 +94,6 @@ func (x *AllocateIPRequest) GetHostname() string {
 	return ""
 }
 
-// The request message containing the user's name.
 type ReleaseIPRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -143,7 +141,6 @@ func (x *ReleaseIPRequest) GetIp() string {
 	return ""
 }
 
-// The response message containing the greetings
 type AllocateIPResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -199,7 +196,6 @@ func (x *AllocateIPResponse) GetError() string {
 	return ""
 }
 
-// The response message containing the greetings
 type ReleaseIPResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

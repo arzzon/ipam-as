@@ -17,7 +17,7 @@ spec:
           image: akzrepo/ipam-as:test1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 50051
           args:
             - --ipam-provider
             - infoblox

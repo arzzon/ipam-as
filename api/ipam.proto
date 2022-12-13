@@ -22,37 +22,26 @@ option go_package = "github.com/arzzon/ipam-as";
 
 package ipamas;
 
-// The greeting service definition.
 service IPManagement {
-  // Sends a greeting
   rpc AllocateIP (AllocateIPRequest) returns (AllocateIPResponse) {}
   rpc ReleaseIP (ReleaseIPRequest) returns (ReleaseIPResponse) {}
 }
 
-//// The request message containing the user's name.
-//message IPRange {
-//  string Label = 1;
-//  string Config = 2;
-//}
 
-// The request message containing the user's name.
 message AllocateIPRequest {
   string Label = 1;
   string Hostname = 2;
 }
 
-// The request message containing the user's name.
 message ReleaseIPRequest {
   string ip = 1;
 }
 
-// The response message containing the greetings
 message AllocateIPResponse {
   string ip = 1;
   string error = 2;
 }
 
-// The response message containing the greetings
 message ReleaseIPResponse {
   string error = 1;
 }

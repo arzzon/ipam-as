@@ -22,7 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IPManagementClient interface {
-	// Sends a greeting
 	AllocateIP(ctx context.Context, in *AllocateIPRequest, opts ...grpc.CallOption) (*AllocateIPResponse, error)
 	ReleaseIP(ctx context.Context, in *ReleaseIPRequest, opts ...grpc.CallOption) (*ReleaseIPResponse, error)
 }
@@ -57,7 +56,6 @@ func (c *iPManagementClient) ReleaseIP(ctx context.Context, in *ReleaseIPRequest
 // All implementations must embed UnimplementedIPManagementServer
 // for forward compatibility
 type IPManagementServer interface {
-	// Sends a greeting
 	AllocateIP(context.Context, *AllocateIPRequest) (*AllocateIPResponse, error)
 	ReleaseIP(context.Context, *ReleaseIPRequest) (*ReleaseIPResponse, error)
 	mustEmbedUnimplementedIPManagementServer()

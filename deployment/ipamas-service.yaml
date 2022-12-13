@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ipam-as
+  name: ipamas-svc
+  namespace: kube-system
+spec:
+  ports:
+    - nodePort: 30220
+      port: 50051
+      protocol: TCP
+      targetPort: 50051
+  selector:
+    app: ipam-as
+  type: NodePort
