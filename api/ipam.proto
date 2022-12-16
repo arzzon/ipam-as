@@ -36,7 +36,7 @@ message AllocateIPRequest {
 
 // ReleaseIPRequest
 message ReleaseIPRequest {
-  string IP = 1;
+  string Hostname = 1;
   string Label = 2;
 }
 
