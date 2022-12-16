@@ -1,4 +1,4 @@
-module github/arzzon/ipam-as
+module github.com/arzzon/ipam-as
 
 go 1.19
 

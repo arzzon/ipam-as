@@ -3,8 +3,8 @@ package infoblox
 import (
 	"encoding/json"
 	"errors"
+	"github.com/arzzon/ipam-as/pkg/types"
 	ibxclient "github.com/infobloxopen/infoblox-go-client"
-	"github/arzzon/ipam-as/pkg/types"
 	"log"
 )
 
