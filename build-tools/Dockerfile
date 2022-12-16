@@ -1,4 +1,4 @@
-FROM golang
+FROM golang:1.19
 
 ENV GO111MODULE=on
 
@@ -6,5 +6,5 @@ WORKDIR /
 
 ADD bin /bin/
 
-EXPOSE 8080
+EXPOSE 50051
 ENTRYPOINT ["/bin/sh"]
