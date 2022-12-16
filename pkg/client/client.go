@@ -34,23 +34,31 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 360*time.Second)
 	defer cancel()
 	// Allocate
-	allocateIP(c, ctx, "Test", "mytest1.com")
+	//allocateIP(c, ctx, "Test", "mytest1.com")
 
 	// Release
-	releaseIP(c, ctx, "10.9.0.2")
+	releaseIP(c, ctx, "127.0.0.1", "default")
 }
 
 func allocateIP(c pb.IPManagementClient, ctx context.Context, label string, hostname string) {
 	r, err := c.AllocateIP(ctx, &pb.AllocateIPRequest{Label: label, Hostname: hostname})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Fatalf("failed to allocated IP: %v", err)
 	}
-	log.Printf("Greeting: %s", r.GetIp())
+	if r.Error != "" {
+		log.Fatalf("failed to allocated IP: %v", err)
+	} else {
+		log.Printf("Allocated IP: %s", r.GetIP())
+	}
 }
-func releaseIP(c pb.IPManagementClient, ctx context.Context, ip string) {
-	r1, err := c.ReleaseIP(ctx, &pb.ReleaseIPRequest{Ip: ip})
+func releaseIP(c pb.IPManagementClient, ctx context.Context, ip string, label string) {
+	r1, err := c.ReleaseIP(ctx, &pb.ReleaseIPRequest{IP: ip, Label: label})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Printf("failed to release IP: %v", err)
 	}
-	log.Printf("IP Released: %v", r1.Error)
+	if r1.Error != "" {
+		log.Printf("failed to release IP: %v", r1.Error)
+	} else {
+		log.Printf("IP Released: %v", r1.Error)
+	}
 }

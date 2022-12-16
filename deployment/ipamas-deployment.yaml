@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ipam-as
+  name: ipamas
+  namespace: kube-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ipam-as
+      app: ipamas
   template:
     metadata:
       labels:
-        app: ipam-as
+        app: ipamas
     spec:
       containers:
-        - name: ipam-as
-          image: akzrepo/ipam-as:test1
+        - name: ipamas
+          image: akzrepo/ipamas:test1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 50051
@@ -28,13 +29,12 @@ spec:
             - --infoblox-wapi-version
             - 2.11.2
             - --infoblox-username
-            - admin
+            - test-user
             - --infoblox-password
-            - infoblox
+            - test-password
             - --infoblox-labels
-            - '{"Dev":{"cidr": "10.8.128.0/17"},"Test":{"cidr": "10.9.0.0/16"},"Production":{"cidr":
-                    "10.10.0.0/16"}, "Default":{"cidr": "10.11.0.0/16"}}'
+            - '{"Dev":{"cidr": "10.8.128.0/17"},"Test":{"cidr": "10.9.0.0/16"}}'
             - --infoblox-netview
-            - netview_10_218_132_7
+            - default
           command:
-            - /bin/ipam-as
+            - /bin/ipamas

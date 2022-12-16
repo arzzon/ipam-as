@@ -15,7 +15,6 @@ import (
 
 const (
 	DefaultProvider = "infoblox"
-	iblabelstemp    = `{"Dev":{"cidr": "10.8.128.0/17"},"Test":{"cidr": "10.9.0.0/16"},"Production":{"cidr":"10.10.0.0/16"}, "Default":{"cidr": "10.11.0.0/16"}}`
 )
 
 var (
@@ -33,15 +32,14 @@ var (
 )
 
 func init() {
-	// TODO: Change default values
-	port = flag.Int("port", 50051, "The server port")
+	port = flag.Int("port", 50051, "The port on which IPAM server runs")
 	provider = flag.String("ipam-provider", DefaultProvider,
 		"Required, the IPAM system that the controller will interface with.")
-	ibLabelMap = flag.String("infoblox-labels", iblabelstemp,
+	ibLabelMap = flag.String("infoblox-labels", "",
 		"Required for mapping the infoblox's dnsview and cidr to IPAM labels")
 	ibHost = flag.String("infoblox-grid-host", "",
 		"Required for infoblox, the grid manager host IP.")
-	ibVersion = flag.String("infoblox-wapi-version", "2.8",
+	ibVersion = flag.String("infoblox-wapi-version", "",
 		"Required for infoblox, the Web API version.")
 	ibPort = flag.String("infoblox-wapi-port", "443",
 		"Optional for infoblox, the Web API port.")
@@ -72,7 +70,7 @@ func main() {
 		}
 		_, err := infoblox.NewInfobloxManager(params)
 		if err != nil {
-			log.Fatalf("Failed to setup Provider: %v", err)
+			log.Fatalf("Failed to setup Infoblox: %v", err)
 		}
 	default:
 		log.Fatalf("Failed to setup Provider")
@@ -80,11 +78,11 @@ func main() {
 	// SETUP AND START GRPC SERVER
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterIPManagementServer(s, &backend.Server{})
-	log.Printf("server listening at %v", lis.Addr())
+	log.Printf("IPAM gRPC Server Listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

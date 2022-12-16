@@ -22,26 +22,31 @@ option go_package = "github.com/arzzon/ipam-as";
 
 package ipamas;
 
+// IPManagement
 service IPManagement {
   rpc AllocateIP (AllocateIPRequest) returns (AllocateIPResponse) {}
   rpc ReleaseIP (ReleaseIPRequest) returns (ReleaseIPResponse) {}
 }
 
-
+// AllocateIPRequest
 message AllocateIPRequest {
   string Label = 1;
   string Hostname = 2;
 }
 
+// ReleaseIPRequest
 message ReleaseIPRequest {
-  string ip = 1;
+  string IP = 1;
+  string Label = 2;
 }
 
+// AllocateIPResponse
 message AllocateIPResponse {
-  string ip = 1;
+  string IP = 1;
   string error = 2;
 }
 
+// ReleaseIPResponse
 message ReleaseIPResponse {
   string error = 1;
 }

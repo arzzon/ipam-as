@@ -3,48 +3,51 @@ package backend
 import (
 	"context"
 	"errors"
+	"fmt"
 	pb "github/arzzon/ipam-as/api"
 	infblx "github/arzzon/ipam-as/pkg/manager/infoblox"
 	"github/arzzon/ipam-as/pkg/types"
 	"log"
 )
 
-// server is used to implement helloworld.GreeterServer.
+// server is used to implement IPManagementServer
 type Server struct {
 	//pb.IPManagementServer
 	pb.UnimplementedIPManagementServer
 }
 
-// SayHello implements helloworld.GreeterServer
+// AllocateIP implements IPManagementServer
 func (s *Server) AllocateIP(ctx context.Context, in *pb.AllocateIPRequest) (*pb.AllocateIPResponse, error) {
 	log.Printf("Received: %v", in.GetLabel())
 	// CHECK IF IP ALREADY ASSIGNED
 	infblxMngr := infblx.GetInfobloxManager()
 	if infblxMngr == nil {
-		return &pb.AllocateIPResponse{Ip: "", Error: "Infoblox not initialized"}, errors.New("Infoblox not initialized")
+		return &pb.AllocateIPResponse{IP: "", Error: "Infoblox not initialized"}, errors.New("Infoblox not initialized")
 	}
 	req := types.IPAMRequest{
 		HostName:  in.Hostname,
 		IPAMLabel: in.Label,
 	}
 	newIP := infblxMngr.AllocateIP(req)
-	return &pb.AllocateIPResponse{Ip: newIP, Error: ""}, nil
+	return &pb.AllocateIPResponse{IP: newIP, Error: ""}, nil
 }
 
-// SayHello implements helloworld.GreeterServer
+// ReleaseIP implements IPManagementServer
 func (s *Server) ReleaseIP(ctx context.Context, in *pb.ReleaseIPRequest) (*pb.ReleaseIPResponse, error) {
-	log.Printf("Received: %v", in.GetIp())
 	// CHECK AND RELEASE IP
 	infblxMngr := infblx.GetInfobloxManager()
 	if infblxMngr == nil {
 		return &pb.ReleaseIPResponse{Error: "Infoblox not initialized"}, errors.New("Infoblox not initialized")
 	}
 	req := types.IPAMRequest{
-		IPAddr: in.Ip,
+		IPAddr:    in.IP,
+		IPAMLabel: in.Label,
 	}
 	err := infblxMngr.ReleaseIP(req)
 	if err != nil {
 		log.Printf("[ERROR] Unable to Release Address: %+v", req)
+		return &pb.ReleaseIPResponse{Error: fmt.Sprint(err)}, err
 	}
+	log.Printf("[INFO] Released IP: %v", in.GetIP())
 	return &pb.ReleaseIPResponse{Error: ""}, nil
 }
