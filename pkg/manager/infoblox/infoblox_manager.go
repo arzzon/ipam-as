@@ -15,11 +15,12 @@ const (
 )
 
 type InfobloxManager struct {
-	connector *ibxclient.Connector
-	objMgr    *ibxclient.ObjectManager
-	ea        ibxclient.EA
-	NetView   string
-	IBLabels  map[string]IBConfig
+	connector   *ibxclient.Connector
+	objMgr      *ibxclient.ObjectManager
+	ea          ibxclient.EA
+	NetView     string
+	IBLabels    map[string]IBConfig
+	HostIPCache map[string]string
 }
 
 type IBConfig struct {
@@ -76,11 +77,12 @@ func NewInfobloxManager(params types.Params) (*InfobloxManager, error) {
 		}
 	}
 	ibMgr := &InfobloxManager{
-		connector: connector,
-		objMgr:    objMgr,
-		ea:        ibxclient.EA{EAKey: EAVal},
-		IBLabels:  labels,
-		NetView:   params.NetView,
+		connector:   connector,
+		objMgr:      objMgr,
+		ea:          ibxclient.EA{EAKey: EAVal},
+		IBLabels:    labels,
+		NetView:     params.NetView,
+		HostIPCache: make(map[string]string),
 	}
 
 	// Validating that dnsView, CIDR exist on infoblox Server
@@ -123,6 +125,7 @@ func (infMgr *InfobloxManager) AllocateIP(req types.IPAMRequest) string {
 		log.Printf("[ERROR] Unable to get a new IP address: %+v", req)
 		return ""
 	}
+	infMgr.HostIPCache[req.HostName] = fixedAddr.IPAddress
 	log.Printf("[DEBUG] Allocated new IP address for the request: %+v, IP:%s", req, fixedAddr.IPAddress)
 	return fixedAddr.IPAddress
 }
@@ -135,10 +138,21 @@ func (infMgr *InfobloxManager) ReleaseIP(req types.IPAMRequest) error {
 	if !ok {
 		return errors.New("IPAM Label is not found")
 	}
-	_, err := infMgr.objMgr.ReleaseIP(infMgr.NetView, label.CIDR, req.IPAddr, "")
+	ip := ""
+	if req.IPAddr != "" {
+		ip = req.IPAddr
+	} else if req.HostName != "" {
+		if mapped_ip, ok := infMgr.HostIPCache[req.HostName]; ok {
+			ip = mapped_ip
+		} else {
+			return errors.New("No IP assigned to Host")
+		}
+	}
+	_, err := infMgr.objMgr.ReleaseIP(infMgr.NetView, label.CIDR, ip, "")
 	if err != nil {
 		return err
 	}
+	delete(infMgr.HostIPCache, req.HostName)
 	return nil
 }
 
