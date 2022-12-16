@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github/arzzon/ipam-as/pkg/backend"
-	"github/arzzon/ipam-as/pkg/manager/infoblox"
-	"github/arzzon/ipam-as/pkg/types"
+	"github.com/arzzon/ipam-as/pkg/backend"
+	"github.com/arzzon/ipam-as/pkg/manager/infoblox"
+	"github.com/arzzon/ipam-as/pkg/types"
 	"log"
 	"net"
 
-	pb "github/arzzon/ipam-as/api"
+	pb "github.com/arzzon/ipam-as/api"
 	"google.golang.org/grpc"
 )
 

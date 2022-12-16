@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	pb "github/arzzon/ipam-as/api"
-	infblx "github/arzzon/ipam-as/pkg/manager/infoblox"
-	"github/arzzon/ipam-as/pkg/types"
+	pb "github.com/arzzon/ipam-as/api"
+	infblx "github.com/arzzon/ipam-as/pkg/manager/infoblox"
+	"github.com/arzzon/ipam-as/pkg/types"
 	"log"
 )
 

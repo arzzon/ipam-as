@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	pb "github/arzzon/ipam-as/api"
+	pb "github.com/arzzon/ipam-as/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
