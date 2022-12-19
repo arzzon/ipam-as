@@ -37,7 +37,7 @@ func main() {
 	//allocateIP(c, ctx, "Test", "mytest1.com")
 
 	// Release
-	releaseIP(c, ctx, "foo.com", "default")
+	releaseIP(c, ctx, "mytest1.com", "default")
 }
 
 func allocateIP(c pb.IPManagementClient, ctx context.Context, label string, hostname string) {
