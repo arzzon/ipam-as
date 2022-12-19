@@ -46,11 +46,11 @@ func (s *Server) ReleaseIP(ctx context.Context, in *pb.ReleaseIPRequest) (*pb.Re
 		HostName:  in.Hostname,
 		IPAMLabel: in.Label,
 	}
-	err := infblxMngr.ReleaseIP(req)
+	ip, err := infblxMngr.ReleaseIP(req)
 	if err != nil {
 		log.Printf("[ERROR] Unable to Release Address: %+v", req)
-		return &pb.ReleaseIPResponse{Error: fmt.Sprint(err)}, err
+		return &pb.ReleaseIPResponse{IP: "", Error: fmt.Sprint(err)}, err
 	}
 	log.Printf("[INFO] Released for Host: %v", in.GetHostname())
-	return &pb.ReleaseIPResponse{Error: ""}, nil
+	return &pb.ReleaseIPResponse{IP: ip, Error: ""}, nil
 }

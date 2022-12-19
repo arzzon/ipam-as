@@ -48,5 +48,6 @@ message AllocateIPResponse {
 
 // ReleaseIPResponse
 message ReleaseIPResponse {
-  string error = 1;
+  string IP = 1;
+  string error = 2;
 }

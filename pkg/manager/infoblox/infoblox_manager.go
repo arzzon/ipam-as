@@ -130,13 +130,13 @@ func (infMgr *InfobloxManager) AllocateIP(req types.IPAMRequest) string {
 	return fixedAddr.IPAddress
 }
 
-func (infMgr *InfobloxManager) ReleaseIP(req types.IPAMRequest) error {
+func (infMgr *InfobloxManager) ReleaseIP(req types.IPAMRequest) (string, error) {
 	if req.IPAMLabel == "" {
-		return errors.New("IPAM Label is required for releasing an IP")
+		return "", errors.New("IPAM Label is required for releasing an IP")
 	}
 	label, ok := infMgr.IBLabels[req.IPAMLabel]
 	if !ok {
-		return errors.New("IPAM Label is not found")
+		return "", errors.New("IPAM Label is not found")
 	}
 	ip := ""
 	if req.IPAddr != "" {
@@ -145,16 +145,17 @@ func (infMgr *InfobloxManager) ReleaseIP(req types.IPAMRequest) error {
 		if mapped_ip, ok := infMgr.HostIPCache[req.HostName]; ok {
 			ip = mapped_ip
 		} else {
-			return errors.New("No IP assigned to Host")
+			return "", errors.New("No IP assigned to Host")
 		}
 	}
 	_, err := infMgr.objMgr.ReleaseIP(infMgr.NetView, label.CIDR, ip, "")
 	if err != nil {
-		return err
+		return "", err
 	}
 	log.Printf("[DEBUG] IP associated with host key %v has been released.", req.HostName)
+	releasedIP := infMgr.HostIPCache[req.HostName]
 	delete(infMgr.HostIPCache, req.HostName)
-	return nil
+	return releasedIP, nil
 }
 
 func (mgr *InfobloxManager) GetNetworkView(name string) ([]ibxclient.Network, error) {
