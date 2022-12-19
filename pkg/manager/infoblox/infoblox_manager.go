@@ -152,6 +152,7 @@ func (infMgr *InfobloxManager) ReleaseIP(req types.IPAMRequest) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("[DEBUG] IP associated with host key %v has been released.", req.HostName)
 	delete(infMgr.HostIPCache, req.HostName)
 	return nil
 }

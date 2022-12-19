@@ -29,7 +29,7 @@ func (s *Server) AllocateIP(ctx context.Context, in *pb.AllocateIPRequest) (*pb.
 		IPAMLabel: in.Label,
 	}
 	newIP := infblxMngr.AllocateIP(req)
-	if len(newIP) == 0 {
+	if len(newIP) != 0 {
 		return &pb.AllocateIPResponse{IP: newIP, Error: ""}, nil
 	}
 	return &pb.AllocateIPResponse{IP: newIP, Error: "Failed to allocated IP"}, errors.New("Failed to allocated IP")
