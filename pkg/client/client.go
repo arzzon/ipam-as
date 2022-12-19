@@ -37,7 +37,7 @@ func main() {
 	//allocateIP(c, ctx, "Test", "mytest1.com")
 
 	// Release
-	releaseIP(c, ctx, "127.0.0.1", "default")
+	releaseIP(c, ctx, "foo.com", "default")
 }
 
 func allocateIP(c pb.IPManagementClient, ctx context.Context, label string, hostname string) {
@@ -51,8 +51,8 @@ func allocateIP(c pb.IPManagementClient, ctx context.Context, label string, host
 		log.Printf("Allocated IP: %s", r.GetIP())
 	}
 }
-func releaseIP(c pb.IPManagementClient, ctx context.Context, ip string, label string) {
-	r1, err := c.ReleaseIP(ctx, &pb.ReleaseIPRequest{IP: ip, Label: label})
+func releaseIP(c pb.IPManagementClient, ctx context.Context, host string, label string) {
+	r1, err := c.ReleaseIP(ctx, &pb.ReleaseIPRequest{Hostname: host, Label: label})
 	if err != nil {
 		log.Printf("failed to release IP: %v", err)
 	}
